@@ -5,3 +5,11 @@ Documentation:
 FileName:
   Exclude:
     - lib/lita-datadog.rb
+
+Metrics/LineLength:
+  Exclude:
+    - spec/lita/handlers/datadog_spec.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/lita/handlers/datadog_spec.rb

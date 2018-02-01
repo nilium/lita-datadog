@@ -34,17 +34,13 @@ describe Lita::Handlers::Datadog, lita_handler: true do
   end
 
   it do
-    is_expected.to route_command(
-      'dd graph metric:"system.load.1{*}"')
+    is_expected.to route_command('dd graph metric:"system.load.1{*}"')
       .to(:graph)
-    is_expected.to route_command(
-      'dd graph metric:"system.load.1{host:hostname01}"')
+    is_expected.to route_command('dd graph metric:"system.load.1{host:hostname01}"')
       .to(:graph)
-    is_expected.to route_command(
-      'dd graph metric:"system.load.1{*},system.load.5{*}"')
+    is_expected.to route_command('dd graph metric:"system.load.1{*},system.load.5{*}"')
       .to(:graph)
-    is_expected.to route_command(
-      'dd graph metric:"system.load.1{*}" event:"sources:something"')
+    is_expected.to route_command('dd graph metric:"system.load.1{*}" event:"sources:something"')
       .to(:graph)
 
     is_expected.to route_command('dd hosts host01').to(:hosts)
