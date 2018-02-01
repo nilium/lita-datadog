@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'lita-datadog'
-  spec.version       = '0.10.0'
+  spec.version       = '0.11.0'
   spec.authors       = ['Eric Sigler']
   spec.email         = ['me@esigler.com']
   spec.description   = 'A Datadog plugin for Lita'
