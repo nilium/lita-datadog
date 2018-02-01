@@ -10,7 +10,7 @@ module Lita
       include Lita::Helpers::Graphs
 
       route(
-        /^graph\s(?<args>.*)$/,
+        /^dd\s+graph\s+(?<args>.+)$/,
         :graph,
         command: true,
         help: {

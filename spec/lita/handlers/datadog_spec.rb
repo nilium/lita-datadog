@@ -28,16 +28,16 @@ describe Lita::Handlers::Datadog, lita_handler: true do
 
   it do
     is_expected.to route_command(
-      'graph metric:"system.load.1{*}"')
+      'dd graph metric:"system.load.1{*}"')
       .to(:graph)
     is_expected.to route_command(
-      'graph metric:"system.load.1{host:hostname01}"')
+      'dd graph metric:"system.load.1{host:hostname01}"')
       .to(:graph)
     is_expected.to route_command(
-      'graph metric:"system.load.1{*},system.load.5{*}"')
+      'dd graph metric:"system.load.1{*},system.load.5{*}"')
       .to(:graph)
     is_expected.to route_command(
-      'graph metric:"system.load.1{*}" event:"sources:something"')
+      'dd graph metric:"system.load.1{*}" event:"sources:something"')
       .to(:graph)
 
     is_expected.to route_command('dd mute host01').to(:mute)
@@ -48,31 +48,31 @@ describe Lita::Handlers::Datadog, lita_handler: true do
   describe '#graph' do
     it 'with valid metric returns an image url' do
       expect(Dogapi::Client).to receive(:new) { success }
-      send_command('graph metric:"system.load.1{*}"')
+      send_command('dd graph metric:"system.load.1{*}"')
       expect(replies.last).to eq(EXAMPLE_IMAGE_URL)
     end
 
     it 'with invalid metric returns an error' do
       expect(Dogapi::Client).to receive(:new) { error }
-      send_command('graph metric:"omg.wtf.bbq{*}"')
+      send_command('dd graph metric:"omg.wtf.bbq{*}"')
       expect(replies.last).to eq(EXAMPLE_ERROR_MSG)
     end
 
     it 'with valid metric and event returns an image url' do
       expect(Dogapi::Client).to receive(:new) { success }
-      send_command('graph metric:"system.load.1{*}"')
+      send_command('dd graph metric:"system.load.1{*}"')
       expect(replies.last).to eq(EXAMPLE_IMAGE_URL)
     end
 
     it 'with an invalid metric returns an error' do
       expect(Dogapi::Client).to receive(:new) { error }
-      send_command('graph metric:"omg.wtf.bbq{*}" event:"sources:sourcename"')
+      send_command('dd graph metric:"omg.wtf.bbq{*}" event:"sources:sourcename"')
       expect(replies.last).to eq(EXAMPLE_ERROR_MSG)
     end
 
     it 'with an invalid event returns an error' do
       expect(Dogapi::Client).to receive(:new) { error }
-      send_command('graph metric:"system.load.1{*}" event:"omg:wtf"')
+      send_command('dd graph metric:"system.load.1{*}" event:"omg:wtf"')
       expect(replies.last).to eq(EXAMPLE_ERROR_MSG)
     end
   end

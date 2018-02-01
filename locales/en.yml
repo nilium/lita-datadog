@@ -6,7 +6,7 @@ en:
           request: Error making DataDog request
         help:
           graph:
-            syntax: 'graph metric:"simple.metric.1{*},simple.metric.5{*}'
+            syntax: 'dd graph metric:"simple.metric.1{*},simple.metric.5{*}'
             desc: 'Graph those metrics, for the default time range'
           mute:
             syntax: 'dd mute <hostname> [message:"Some reason"]'
