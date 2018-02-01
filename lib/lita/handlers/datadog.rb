@@ -19,7 +19,7 @@ module Lita
       )
 
       route(
-        /^dd\smute\s(?<hostname>\S*)(\smessage:"(?<message>.*)")?$/,
+        /^dd\s+mute\s+(?<hostname>\S*)(\s+message:"(?<message>.*)")?$/,
         :mute,
         command: true,
         help: {
@@ -28,7 +28,7 @@ module Lita
       )
 
       route(
-        /^dd\sunmute\s(?<hostname>\S*)$/,
+        /^dd\s+unmute\s+(?<hostname>\S*)$/,
         :unmute,
         command: true,
         help: {
