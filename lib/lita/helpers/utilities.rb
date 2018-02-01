@@ -57,7 +57,7 @@ module Lita
         query = "#{facet}:#{query}"
         return_code, result = client.search(query)
         if return_code != 200
-          log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
+          log.warning("URL (#{return_code}): #{result['errors'].join("\n")}")
           return nil
         end
         result['results'][facet.to_s]
