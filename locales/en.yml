@@ -4,6 +4,7 @@ en:
       datadog:
         errors:
           request: Error making DataDog request
+          no_query: ':failed: No query given'
         help:
           graph:
             syntax: 'dd graph metric:"simple.metric.1{*},simple.metric.5{*}'
@@ -17,9 +18,16 @@ en:
           unmute:
             syntax: 'dd unmute <hostname>'
             desc: 'Unmute a host in DataDog'
+        metrics:
+          success:
+            zero: No metrics found
+            one: |-
+              Metric found:
+              %{body}
+            other: |-
+              Metrics found:
+              %{body}
         hosts:
-          no_query: ':failed: No query given'
-          not_found: No hosts found
           success:
             zero: No hosts found
             one: |-

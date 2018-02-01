@@ -20,10 +20,19 @@ module Lita
 
       route(
         /^dd\s+hosts(?:\s+(?<query>\S*))?$/,
-        :find_hosts,
+        :hosts,
         command: true,
         help: {
           t('help.hosts.syntax') => t('help.hosts.desc')
+        }
+      )
+
+      route(
+        /^dd\s+metrics(?:\s+(?<query>\S*))?$/,
+        :metrics,
+        command: true,
+        help: {
+          t('help.metrics.syntax') => t('help.metrics.desc')
         }
       )
 
@@ -50,13 +59,22 @@ module Lita
         response.reply(content)
       end
 
-      def find_hosts(response)
-        query = response.match_data['query'].strip
-        return response.reply(t('hosts.no_query')) if query.empty?
-        hosts = get_hosts(query)
-        return response.reply(t('errors.request')) unless hosts
-        body = "- #{hosts.join("\n- ")}"
-        response.reply(t('hosts.success', count: hosts.length, body: body))
+      def hosts(response)
+        query = response.match_data['query']
+        reply_to_facet_search(response, :hosts, query)
+      end
+
+      def metrics(response)
+        query = response.match_data['query']
+        reply_to_facet_search(response, :metrics, query)
+      end
+
+      def reply_to_facet_search(response, facet, query)
+        return response.reply(t('errors.no_query')) if !query || query.empty?
+        results = search(facet, query)
+        return response.reply(t('errors.request')) unless results
+        body = "- #{results.join("\n- ")}"
+        response.reply(t("#{facet}.success", count: results.length, body: body))
       end
 
       def mute(response)

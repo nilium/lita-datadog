@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Lita::Handlers::Datadog, lita_handler: true do
-  EXAMPLE_IMAGE_URL           = 'http://www.example.com/path/that/ends/in.png'.freeze
-  EXAMPLE_ERROR_MSG           = 'Error making DataDog request'.freeze
-  EXAMPLE_BAD_HOSTS_QUERY_MSG = ':failed: No query given'.freeze
+  EXAMPLE_IMAGE_URL     = 'http://www.example.com/path/that/ends/in.png'.freeze
+  EXAMPLE_ERROR_MSG     = 'Error making DataDog request'.freeze
+  EXAMPLE_BAD_QUERY_MSG = ':failed: No query given'.freeze
 
   let(:success) do
     client = double
@@ -16,8 +16,11 @@ describe Lita::Handlers::Datadog, lita_handler: true do
     allow(client).to receive(:unmute_host) {
       [200, { 'hostname' => 'host01' }]
     }
-    allow(client).to receive(:search) {
+    allow(client).to receive(:search).with(/^hosts:/) {
       [200, { 'results' => { 'hosts' => %w[host-01 host-02 host-03] } }]
+    }
+    allow(client).to receive(:search).with(/^metrics:/) {
+      [200, { 'results' => { 'metrics' => %w[test.metric] } }]
     }
     client
   end
@@ -44,9 +47,13 @@ describe Lita::Handlers::Datadog, lita_handler: true do
       'dd graph metric:"system.load.1{*}" event:"sources:something"')
       .to(:graph)
 
-    is_expected.to route_command('dd hosts host01').to(:find_hosts)
-    is_expected.to route_command('dd   hosts    host-2').to(:find_hosts)
-    is_expected.to route_command('dd hosts').to(:find_hosts)
+    is_expected.to route_command('dd hosts host01').to(:hosts)
+    is_expected.to route_command('dd   hosts    host-2').to(:hosts)
+    is_expected.to route_command('dd hosts').to(:hosts)
+
+    is_expected.to route_command('dd metrics test').to(:metrics)
+    is_expected.to route_command('dd   metrics    test').to(:metrics)
+    is_expected.to route_command('dd metrics').to(:metrics)
 
     is_expected.to route_command('dd mute host01').to(:mute)
     is_expected.to route_command('dd mute host01 message:"Foo Bar"').to(:mute)
@@ -62,7 +69,20 @@ describe Lita::Handlers::Datadog, lita_handler: true do
 
     it 'with empty query returns an error' do
       send_command('dd hosts   ')
-      expect(replies.last).to eq(EXAMPLE_BAD_HOSTS_QUERY_MSG)
+      expect(replies.last).to eq(EXAMPLE_BAD_QUERY_MSG)
+    end
+  end
+
+  describe '#metrics' do
+    it 'with valid query returns a list of zero or more metrics' do
+      expect(Dogapi::Client).to receive(:new) { success }
+      send_command('dd metrics test')
+      expect(replies.last).to eq("Metric found:\n- test.metric")
+    end
+
+    it 'with empty query returns an error' do
+      send_command('dd metrics')
+      expect(replies.last).to eq(EXAMPLE_BAD_QUERY_MSG)
     end
   end
 

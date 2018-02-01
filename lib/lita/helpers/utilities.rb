@@ -46,18 +46,21 @@ module Lita
         contents
       end
 
-      def get_hosts(query)
+      def search(facet, query)
+        return nil unless %i[hosts metrics].include? facet
         client = Dogapi::Client.new(config.api_key, config.application_key)
         return nil unless client
+        search_with_client(client, facet, query)
+      end
 
-        query = "hosts:#{query}"
+      def search_with_client(client, facet, query)
+        query = "#{facet}:#{query}"
         return_code, result = client.search(query)
         if return_code != 200
           log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
           return nil
         end
-
-        result['results']['hosts']
+        result['results'][facet.to_s]
       end
 
       def parse_arguments(arg_string)
