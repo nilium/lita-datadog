@@ -8,12 +8,26 @@ en:
           graph:
             syntax: 'dd graph metric:"simple.metric.1{*},simple.metric.5{*}'
             desc: 'Graph those metrics, for the default time range'
+          hosts:
+            syntax: 'dd hosts <query>'
+            desc: 'Search for hosts seen by Datadog'
           mute:
             syntax: 'dd mute <hostname> [message:"Some reason"]'
             desc: 'Mute a host in DataDog, optionally with a message'
           unmute:
             syntax: 'dd unmute <hostname>'
             desc: 'Unmute a host in DataDog'
+        hosts:
+          no_query: ':failed: No query given'
+          not_found: No hosts found
+          success:
+            zero: No hosts found
+            one: |-
+              Host found:
+              %{body}
+            other: |-
+              Hosts found:
+              %{body}
         mute:
           success: "Host %{host} muted"
         unmute:

@@ -19,6 +19,15 @@ module Lita
       )
 
       route(
+        /^dd\s+hosts(?:\s+(?<query>\S*))?$/,
+        :find_hosts,
+        command: true,
+        help: {
+            t('help.hosts.syntax') => t('help.hosts.desc'),
+        }
+      )
+
+      route(
         /^dd\s+mute\s+(?<hostname>\S*)(\s+message:"(?<message>.*)")?$/,
         :mute,
         command: true,
@@ -39,6 +48,21 @@ module Lita
       def graph(response)
         content = snapshot(parse_arguments(response.match_data['args']))
         response.reply(content)
+      end
+
+      def find_hosts(response)
+        query = response.match_data['query'].strip
+        return response.reply(t('hosts.no_query')) if query.empty?
+        hosts = get_hosts(query)
+        if !hosts
+          response.reply(t('errors.request'))
+        else
+          response.reply(
+            t('hosts.success',
+              count: hosts.length,
+              body: "- #{hosts.join("\n- ")}")
+          )
+        end
       end
 
       def mute(response)

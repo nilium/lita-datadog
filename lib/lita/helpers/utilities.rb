@@ -46,6 +46,20 @@ module Lita
         contents
       end
 
+      def get_hosts(query)
+        client = Dogapi::Client.new(config.api_key, config.application_key)
+        return nil unless client
+
+        query = "hosts:#{query}"
+        return_code, result = client.search(query)
+        if return_code != 200
+          log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
+          return nil
+        end
+
+        result['results']['hosts']
+      end
+
       def parse_arguments(arg_string)
         end_ts   = parse_end(arg_string)
         start_ts = parse_start(arg_string, end_ts)
