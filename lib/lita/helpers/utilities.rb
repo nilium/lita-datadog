@@ -9,7 +9,7 @@ module Lita
         return_code, contents = client.mute_host(hostname, args)
 
         if return_code.to_s != '200'
-          log.warning("URL (#{return_code}): #{contents['errors'].join('\n')}")
+          log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
           return false
         end
 
@@ -23,7 +23,7 @@ module Lita
         return_code, contents = client.unmute_host(hostname)
 
         if return_code.to_s != '200'
-          log.warning("URL (#{return_code}): #{contents['errors'].join('\n')}")
+          log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
           return false
         end
 
@@ -39,7 +39,7 @@ module Lita
                                                       end_ts, event_query)
 
         if return_code.to_s != '200'
-          log.warning("URL (#{return_code}): #{contents['errors'].join('\n')}")
+          log.warning("URL (#{return_code}): #{contents['errors'].join("\n")}")
           return nil
         end
 
