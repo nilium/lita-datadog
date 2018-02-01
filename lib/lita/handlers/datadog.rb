@@ -23,7 +23,7 @@ module Lita
         :find_hosts,
         command: true,
         help: {
-            t('help.hosts.syntax') => t('help.hosts.desc'),
+          t('help.hosts.syntax') => t('help.hosts.desc')
         }
       )
 
@@ -54,15 +54,9 @@ module Lita
         query = response.match_data['query'].strip
         return response.reply(t('hosts.no_query')) if query.empty?
         hosts = get_hosts(query)
-        if !hosts
-          response.reply(t('errors.request'))
-        else
-          response.reply(
-            t('hosts.success',
-              count: hosts.length,
-              body: "- #{hosts.join("\n- ")}")
-          )
-        end
+        return response.reply(t('errors.request')) unless hosts
+        body = "- #{hosts.join("\n- ")}"
+        response.reply(t('hosts.success', count: hosts.length, body: body))
       end
 
       def mute(response)
