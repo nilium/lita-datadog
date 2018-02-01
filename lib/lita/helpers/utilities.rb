@@ -56,7 +56,7 @@ module Lita
       def search_with_client(client, facet, query)
         query = "#{facet}:#{query}"
         return_code, result = client.search(query)
-        if return_code != 200
+        if return_code != '200'
           log.warning("URL (#{return_code}): #{result['errors'].join("\n")}")
           return nil
         end
