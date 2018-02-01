@@ -45,38 +45,38 @@ end
 Basic graph of the load on all of your systems:
 
 ```
-Lita graph metric:"system.load.1{*}"
+Lita dd graph metric:"system.load.1{*}"
 ```
 
 Graph of load for one specific system:
 ```
-Lita graph metric:"system.load.1{host:hostname01}"
+Lita dd graph metric:"system.load.1{host:hostname01}"
 ```
 
 Multiple attributes plotted in one graph:
 ```
-Lita graph metric:"system.load.1{*},system.load.5{*}"
+Lita dd graph metric:"system.load.1{*},system.load.5{*}"
 ```
 
 Show graph, with events marked in:
 ```
-Lita graph metric:"system.load.1{*}" event:"sources:sourcename"
+Lita dd graph metric:"system.load.1{*}" event:"sources:sourcename"
 ```
 
 Manipulate time range being graphed:
 ```
-Lita graph metric:"system.load.1{*}" start:"2 hours ago"
-Lita graph metric:"system.load.1{*}" from:"2 hours ago" to:"30 minutes ago"
+Lita dd graph metric:"system.load.1{*}" start:"2 hours ago"
+Lita dd graph metric:"system.load.1{*}" from:"2 hours ago" to:"30 minutes ago"
 ```
 
 Graph takes the following arguments:
 ```
 metric:"<metric>"
 event:"<event>"
-start:"<time description>"
-end:"<time description>"
 from:"<time description>"
 to:"<time description>"
+start:"<time description>"    # alias of 'from'
+end:"<time description>"      # alias of 'to'
 ```
 
 Time descriptions are parsed by https://github.com/mojombo/chronic
